@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coder-Bot API Portal</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 100%; max-width: 450px; }
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; color: #38bdf8; }
+        label { display: block; margin-top: 1rem; font-size: 0.875rem; color: #94a3b8; }
+        input { width: 100%; padding: 0.75rem; margin-top: 0.25rem; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; box-sizing: border-box; }
+        button { width: 100%; padding: 0.75rem; margin-top: 1.25rem; border-radius: 6px; border: none; background: #0284c7; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #0369a1; }
+        .result { margin-top: 1rem; padding: 0.75rem; border-radius: 6px; display: none; font-size: 0.875rem; word-break: break-all; }
+        .success { background: #064e3b; color: #6ee7b7; border: 1px solid #047857; }
+        .error { background: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🔑 API Key Portal</h1>
+    
+    <label for="serverUrl">API Server URL</label>
+    <input type="text" id="serverUrl" value="http://localhost:8000" placeholder="e.g. https://your-server.com">
+
+    <label for="apiKey">Enter Your API Key</label>
+    <input type="text" id="apiKey" placeholder="coder-xxxxxxxxxxxxxxxx">
+
+    <button onclick="testKey()">Verify API Key</button>
+
+    <div id="statusBox" class="result"></div>
+</div>
+
+<script>
+    async function testKey() {
+        const baseUrl = document.getElementById('serverUrl').value.replace(/\/$/, "");
+        const apiKey = document.getElementById('apiKey').value.trim();
+        const box = document.getElementById('statusBox');
+
+        if (!apiKey) {
+            showBox("Please enter an API Key.", false);
+            return;
+        }
+
+        try {
+            const response = await fetch(`${baseUrl}/verify-key`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ api_key: apiKey })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showBox(`✅ Key Valid! Connected as: ${data.user.username} (ID: ${data.user.discord_id})`, true);
+            } else {
+                showBox(`❌ ${data.detail || "Authentication Failed"}`, false);
+            }
+        } catch (err) {
+            showBox("❌ Could not connect to API Server. Check your URL or server status.", false);
+        }
+    }
+
+    function showBox(msg, isSuccess) {
+        const box = document.getElementById('statusBox');
+        box.style.display = 'block';
+        box.className = `result ${isSuccess ? 'success' : 'error'}`;
+        box.innerText = msg;
+    }
+</script>
+
+</body>
+</html>
