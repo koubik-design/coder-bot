@@ -53,3 +53,23 @@ INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
 INFO:     Finished server process [4547]
 INFO:     Stopping reloader process [4544]
+==========================================
+🚀 Starting Coder-Bot Ecosystem...
+==========================================
+📡 Launching API Server (api_server.py)...
+🤖 Launching Discord Bot (main.py)...
+INFO:     Will watch for changes in these directories: ['/home/server/coder-bot']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [4465] using StatReload
+INFO:     Started server process [4482]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Terminated
+
+🛑 Shutdown signal received! Stopping all processes...
+👋 All services stopped cleanly.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4482]
+INFO:     Stopping reloader process [4465]
