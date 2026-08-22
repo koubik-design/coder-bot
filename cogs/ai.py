@@ -1,65 +1,103 @@
 import discord
 from discord.ext import commands
-import database
+from utils import EMOJI_LOADER, get_skill, call_ai, send_smart
 
 class AICog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def process_ai_request(self, ctx, prompt, task_type):
-        # 1. Ban Check
-        if database.is_user_banned(str(ctx.author.id)):
-            return await ctx.send("❌ You are restricted from using this bot's AI capabilities.")
+    async def get_thread_context(self, message_or_ctx):
+        """Reads the previous 20 messages and authors if inside a thread."""
+        channel = message_or_ctx.channel
+        context_history = []
 
-        async with ctx.typing():
-            context_prompt = prompt
+        if isinstance(channel, discord.Thread):
+            async for msg in channel.history(limit=21):
+                if msg.id != message_or_ctx.message.id:
+                    context_history.append({
+                        "author": str(msg.author),
+                        "content": msg.content
+                    })
+            context_history.reverse()
 
-            # 2. Thread History Reading
-            if isinstance(ctx.channel, discord.Thread):
-                history_messages = []
-                async for msg in ctx.channel.history(limit=10, oldest_first=True):
-                    if msg.content:
-                        author_label = "Bot" if msg.author.bot else msg.author.name
-                        history_messages.append(f"{author_label}: {msg.content}")
+        return context_history
 
-                if history_messages:
-                    conversation_history = "\n".join(history_messages)
-                    context_prompt = f"Previous Conversation:\n{conversation_history}\n\n{task_type} Request: {prompt}"
+    async def format_prompt_with_history(self, ctx, current_prompt):
+        """Appends thread context history to the prompt if available."""
+        history = await self.get_thread_context(ctx)
+        if not history:
+            return current_prompt
+        
+        history_str = "\n".join([f"{item['author']}: {item['content']}" for item in history])
+        return f"Thread History:\n{history_str}\n\nCurrent Request: {current_prompt}"
 
-            # Simulated AI Response Engine (Replace with your real AI API call)
-            if task_type == "Code":
-                ai_response = f"Here is the code you requested for:\n> {prompt}\n\n```python\n# Generated code goes here\nprint('Hello World')\n```"
-            elif task_type == "Plan":
-                ai_response = f"Here is your step-by-step plan for:\n> {prompt}\n\n1. First step\n2. Second step\n3. Execute"
-            else:
-                ai_response = f"I processed your query with context awareness!\n> {prompt}"
+    @commands.command()
+    async def code(self, ctx, language: str, *, prompt: str):
+        """Generates code taking the FIRST word as language and the REST as prompt."""
+        sk = get_skill(language)
+        sys_p = f"You are Coder, an expert {language} developer."
+        if sk:
+            sys_p += f"\nFollow rules strictly:\n{sk}"
 
-            # 3. Log Prompt to Database
-            server_name = ctx.guild.name if ctx.guild else "Direct Message"
-            database.log_prompt(
-                discord_id=str(ctx.author.id),
-                username=str(ctx.author),
-                server_name=server_name,
-                prompt=f"[{task_type}] {prompt}",
-                response=ai_response
-            )
+        full_prompt = await self.format_prompt_with_history(ctx, prompt)
 
-            await ctx.send(ai_response)
+        msg = await ctx.send(f"{EMOJI_LOADER} Generating `{language}` code...")
+        res = await call_ai(sys_p, full_prompt)
 
-    @commands.command(name="ask")
-    async def ask(self, ctx, *, prompt: str):
-        """Ask a general question."""
-        await self.process_ai_request(ctx, prompt, "Question")
+        try:
+            await msg.delete()
+        except Exception:
+            pass
 
-    @commands.command(name="code")
-    async def code(self, ctx, *, prompt: str):
-        """Generate code based on a prompt."""
-        await self.process_ai_request(ctx, prompt, "Code")
+        await send_smart(ctx, res)
 
-    @commands.command(name="plan")
+    @commands.command()
     async def plan(self, ctx, *, prompt: str):
-        """Generate a step-by-step plan."""
-        await self.process_ai_request(ctx, prompt, "Plan")
+        """Generates software architecture and implementation plan."""
+        full_prompt = await self.format_prompt_with_history(ctx, prompt)
+
+        msg = await ctx.send(f"{EMOJI_LOADER} Planning system architecture...")
+        sys_p = "You are an expert system architect. Provide a structured step-by-step roadmap and file outline."
+        res = await call_ai(sys_p, full_prompt)
+
+        try:
+            await msg.delete()
+        except Exception:
+            pass
+
+        await send_smart(ctx, res)
+
+    @commands.command()
+    async def ask(self, ctx, *, question: str):
+        """Answers technical programming questions directly."""
+        full_prompt = await self.format_prompt_with_history(ctx, question)
+
+        msg = await ctx.send(f"{EMOJI_LOADER} Thinking...")
+        sys_p = "You are Coder, an expert technical consultant. Answer clearly and concisely."
+        res = await call_ai(sys_p, full_prompt)
+
+        try:
+            await msg.delete()
+        except Exception:
+            pass
+
+        await send_smart(ctx, res)
+
+    @commands.command()
+    async def debug(self, ctx, language: str, *, raw_code: str):
+        """Debugs broken code snippets."""
+        full_prompt = await self.format_prompt_with_history(ctx, raw_code)
+
+        msg = await ctx.send(f"{EMOJI_LOADER} Analyzing code for bugs...")
+        sys_p = f"Find errors and provide fixed {language} code."
+        res = await call_ai(sys_p, full_prompt)
+
+        try:
+            await msg.delete()
+        except Exception:
+            pass
+
+        await send_smart(ctx, res)
 
 async def setup(bot):
     await bot.add_cog(AICog(bot))

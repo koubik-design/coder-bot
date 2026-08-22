@@ -1,39 +1,38 @@
 import discord
 from discord.ext import commands
 import database
+import traceback
 
 class APICog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="api", aliases=["key"])
-    async def get_api_key(self, ctx):
-        """Generates or fetches your personal API key."""
-        # Generate or fetch existing key from SQLite database
-        api_key = database.generate_api_key(
-            discord_id=str(ctx.author.id),
-            username=str(ctx.author)
-        )
-
-        embed = discord.Embed(
-            title="🔑 Your Coder-Bot API Key",
-            description="Keep this key private! Do not share it with anyone.",
-            color=discord.Color.blue()
-        )
-        embed.add_field(name="API Key", value=f"`{api_key}`", inline=False)
-        embed.add_field(
-            name="🌐 GitHub Pages Portal Usage",
-            value="Paste this key into the API key box on your web dashboard to authenticate.",
-            inline=False
-        )
-
-        # Send DM for privacy
+    @commands.command(name="api")
+    async def generate_api(self, ctx):
+        """Generates a personal API key for the Coder-Bot CLI/Backend."""
+        msg = await ctx.send("⏳ Generating your secure API key...")
+        
         try:
-            await ctx.author.send(embed=embed)
-            if ctx.guild:
-                await ctx.send(f"📬 {ctx.author.mention}, sent your API key via Direct Message!", delete_after=10)
-        except discord.Forbidden:
-            await ctx.send("❌ I couldn't send you a DM! Please enable Direct Messages from server members in your Privacy Settings.")
+            # Attempt to generate and store the key
+            key = database.generate_key(str(ctx.author.id), str(ctx.author))
+            
+            try:
+                # Send key via DM for security
+                await ctx.author.send(
+                    f"🔑 **Your Coder-Bot API Key:**\n`{key}`\n\n"
+                    f"*Keep this secret! Use it for the CLI like this:*\n"
+                    f"`coder-cli {key}`"
+                )
+                await msg.edit(content="✅ API key generated and sent to your DMs! Please check your private messages.")
+            except discord.Forbidden:
+                # Fallback if the user has DMs disabled
+                await msg.edit(content=f"❌ I couldn't DM you! Please enable DMs from server members.")
+                
+        except Exception as e:
+            # If the database or anything else crashes, print it to Discord!
+            error_msg = str(e)
+            print(f"API ERROR:\n{traceback.format_exc()}")
+            await msg.edit(content=f"❌ **CRASHED:** Failed to generate key. Error:\n```python\n{error_msg}\n```")
 
 async def setup(bot):
     await bot.add_cog(APICog(bot))

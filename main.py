@@ -4,6 +4,14 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+import logging
+
+# Setup logging to print everything to the console
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 # Load environment variables explicitly from script's directory
 env_path = Path(__file__).resolve().parent / '.env'
@@ -42,6 +50,14 @@ async def on_ready():
     print(f"🌐 Guilds      : Connected to {len(bot.guilds)} server(s)")
     print(f"⚡ Prefix      : '{bot.command_prefix}'")
     print("=" * 45 + "\n")
+
+@bot.event
+async def on_command(ctx):
+    logging.info(f"[COMMAND USED] Author: {ctx.author} | Channel: {ctx.channel} | Command: {ctx.message.content}")
+
+@bot.event
+async def on_command_error(ctx, error):
+    logging.error(f"[COMMAND ERROR] Command '{ctx.message.content}' raised an error: {error}")
 
 async def main():
     if not TOKEN:
