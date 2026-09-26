@@ -1,7 +1,7 @@
-# Coder Bot [https://hackatime.hackclub.com/api/v1/badge/U0C47G9FF8F/koubik-design/coder-bot]
+# Coder Bot 
 
 An advanced, asynchronous Python-based Discord bot designed for developer utilities, dynamic interaction handling, AutoSharded scalability, and specialized integrations such as the **Library of Babel** index and automated codebase sanitization.
-
+[https://hackatime.hackclub.com/api/v1/badge/U0C47G9FF8F/koubik-design/coder-bot]
 ---
 
 ## Table of Contents
