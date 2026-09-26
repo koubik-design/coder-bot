@@ -1,10 +1,10 @@
-# 🤖 Coder Bot
+# Coder Bot
 
 An advanced, asynchronous Python-based Discord bot designed for developer utilities, dynamic interaction handling, AutoSharded scalability, and specialized integrations such as the **Library of Babel** index and automated codebase sanitization.
 
 ---
 
-## 📌 Table of Contents
+## Table of Contents
 
 * [Features](https://www.google.com/search?q=%2523-features&utm_source=gemini)
 * [Architecture & Tech Stack](https://www.google.com/search?q=%2523-architecture--tech-stack&utm_source=gemini)
@@ -23,19 +23,19 @@ An advanced, asynchronous Python-based Discord bot designed for developer utilit
 
 ---
 
-## ✨ Features
+##  Features
 
-* **⚡ High Performance & Scalability**: Built with `discord.ext.commands.AutoShardedBot` for handling 2,500+ servers smoothly.
-* **📚 Library of Babel Integration**: Deep search and precise hex coordinate lookups via hybrid commands (`!babel`, `/babel`) and inline message listeners (`k:keyword`, `f:hex:wall:shelf:vol:page`).
-* **🧹 Built-in Code Sanitizer**: Dedicated script for recursively stripping Python comments (`#`) and Unicode/Discord emojis across the codebase while preserving strings.
-* **🛡️ Advanced Security & Checks**: Global command blacklist filters, owner-restricted operations, and secure DM handling.
-* **⏳ Interaction Deferrals & Webhooks**: Prevents standard 3-second Discord timeouts on high-latency operations with `interaction.response.defer()`.
-* **📢 Auto-Publishing**: Automatically crossposts news and announcement channel updates to follower guilds.
-* **🎭 Dynamic Rich Presence**: Real-time status update commands for activity monitoring.
+* ** High Performance & Scalability**: Built with `discord.ext.commands.AutoShardedBot` for handling 2,500+ servers smoothly.
+* ** Library of Babel Integration**: Deep search and precise hex coordinate lookups via hybrid commands (`!babel`, `/babel`) and inline message listeners (`k:keyword`, `f:hex:wall:shelf:vol:page`).
+* ** Built-in Code Sanitizer**: Dedicated script for recursively stripping Python comments (`#`) and Unicode/Discord emojis across the codebase while preserving strings.
+* ** Advanced Security & Checks**: Global command blacklist filters, owner-restricted operations, and secure DM handling.
+* ** Interaction Deferrals & Webhooks**: Prevents standard 3-second Discord timeouts on high-latency operations with `interaction.response.defer()`.
+* ** Auto-Publishing**: Automatically crossposts news and announcement channel updates to follower guilds.
+* ** Dynamic Rich Presence**: Real-time status update commands for activity monitoring.
 
 ---
 
-## 🛠️ Architecture & Tech Stack
+##  Architecture & Tech Stack
 
 | Component | Technology | Purpose |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ An advanced, asynchronous Python-based Discord bot designed for developer utilit
 
 ---
 
-## 📂 Repository Structure
+##  Repository Structure
 
 ```text
 coder-bot/
@@ -62,7 +62,7 @@ coder-bot/
 
 ---
 
-## 🚀 Installation & Setup
+##  Installation & Setup
 
 ### Prerequisites
 
@@ -104,7 +104,7 @@ pip install -r requirements.txt
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 Create a `.env` or standard configuration file in the project root:
 
@@ -122,7 +122,7 @@ Make sure the following **Privileged Gateway Intents** are enabled in the Discor
 
 ---
 
-## 📖 Commands & Modules
+##  Commands & Modules
 
 ### Core Utilities
 
@@ -179,7 +179,7 @@ Look at page f:0:1:2:3:15
 
 ---
 
-## 🧹 Codebase Sanitization
+##  Codebase Sanitization
 
 The project includes `clean.py`, a script designed to clean Python code by removing all `#` comments (while preserving `#` inside strings) and stripping Unicode & custom Discord emojis.
 
@@ -200,7 +200,7 @@ python3 ~/clean.py
 
 ---
 
-## 🚢 Deployment & Production
+##  Deployment & Production
 
 ### AutoSharding Configuration
 
@@ -253,7 +253,7 @@ sudo systemctl start coderbot
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 1. **Fork** the repository.
 2. **Create** a feature branch (`git checkout -b feature/NewFeature`).
@@ -264,6 +264,6 @@ sudo systemctl start coderbot
 
 ---
 
-## 📄 License
+##  License
 
 Distributed under the MIT License. See `LICENSE` for more information.
