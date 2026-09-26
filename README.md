@@ -1,7 +1,7 @@
 # Coder Bot 
 
 An advanced, asynchronous Python-based Discord bot designed for developer utilities, dynamic interaction handling, AutoSharded scalability, and specialized integrations such as the **Library of Babel** index and automated codebase sanitization.
-[https://hackatime.hackclub.com/api/v1/badge/U0C47G9FF8F/koubik-design/coder-bot]
+
 ---
 
 ## Table of Contents
@@ -14,7 +14,7 @@ An advanced, asynchronous Python-based Discord bot designed for developer utilit
 * [Commands & Modules](https://www.google.com/search?q=%2523-commands--modules&utm_source=gemini)
 * [Core Utilities](https://www.google.com/search?q=%2523core-utilities&utm_source=gemini)
 * [Library of Babel Cog (`cogs/babel.py`)](https://www.google.com/search?q=%2523library-of-babel-cog&utm_source=gemini)
-
+* [https://hackatime.hackclub.com/api/v1/badge/U0C47G9FF8F/koubik-design/coder-bot]
 
 * [Codebase Sanitization (`clean.py`)](https://www.google.com/search?q=%2523-codebase-sanitization&utm_source=gemini)
 * [Deployment & Production](https://www.google.com/search?q=%2523-deployment--production&utm_source=gemini)
