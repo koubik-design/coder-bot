@@ -2,3 +2,5 @@
 .env
 *.db
 skills/*
+.wakatime-project
+coder-bot.code-workspace
