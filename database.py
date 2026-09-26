@@ -1,12 +1,9 @@
 import sqlite3
 import secrets
-
 DB_PATH = "coder_bot.db"
-
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    # Creates table instantly, UNIQUE on api_key makes identification lightning fast
     c.execute('''CREATE TABLE IF NOT EXISTS users (
                     user_id TEXT PRIMARY KEY,
                     username TEXT,
@@ -14,7 +11,6 @@ def init_db():
                  )''')
     conn.commit()
     conn.close()
-
 def generate_key(user_id, username):
     """Generates and stores a key instantly."""
     new_key = f"cb-{secrets.token_hex(16)}"
@@ -25,7 +21,6 @@ def generate_key(user_id, username):
     conn.commit()
     conn.close()
     return new_key
-
 def verify_key(api_key):
     """Checks if key exists and returns user info."""
     conn = sqlite3.connect(DB_PATH)
@@ -34,6 +29,4 @@ def verify_key(api_key):
     res = c.fetchone()
     conn.close()
     return res
-
-# Run initialization when module loads
 init_db()
